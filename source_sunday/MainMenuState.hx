@@ -43,7 +43,7 @@ class MainMenuState extends MusicBeatState
 	public static var nightly:String = "";
 	public static var bgcol:FlxColor = 0xFF343434;
 
-	public static var kadeEngineVer:String = "1.5.4" + nightly;
+	public static var kadeEngineVer:String = "1.5.5" + nightly;
 	public static var gameVer:String = "0.2.7.1";
 	public var bl:Float = 0;
 	public static var instance:MainMenuState = null;
@@ -65,7 +65,7 @@ class MainMenuState extends MusicBeatState
 
 		if (!FlxG.sound.music.playing)
 		{
-			FlxG.sound.playMusic(Paths.music('freakyMenu'));
+			FlxG.sound.playMusic(Paths.music('shred'));
 		}
 		
 		#if shaders

@@ -70,7 +70,7 @@ class GameplayCustomizeState extends MusicBeatState
 
 		add(camFollow);
 
-		FlxG.camera.follow(camFollow, LOCKON, 0.01);
+		FlxG.camera.follow(camFollow, LOCKON, 0.1);
 		// FlxG.camera.setScrollBounds(0, FlxG.width, 0, FlxG.height);
 		FlxG.camera.zoom = 0.9;
 		FlxG.camera.focusOn(camFollow.getPosition());
