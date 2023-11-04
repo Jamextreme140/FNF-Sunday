@@ -9,8 +9,8 @@ import io.newgrounds.objects.Medal;
 import io.newgrounds.objects.Score;
 import io.newgrounds.objects.ScoreBoard;
 import io.newgrounds.objects.events.Response;
-import io.newgrounds.objects.events.Result.GetCurrentVersionResult;
-import io.newgrounds.objects.events.Result.GetVersionResult;
+import io.newgrounds.objects.events.Result.GetCurrentVersionData;
+import io.newgrounds.objects.events.Result.GetVersionData;
 import lime.app.Application;
 import openfl.display.Stage;
 
@@ -44,7 +44,7 @@ class NGio
 
 			new FlxTimer().start(2, function(tmr:FlxTimer)
 			{
-				var call = NG.core.calls.app.getCurrentVersion(GAME_VER).addDataHandler(function(response:Response<GetCurrentVersionResult>)
+				var call = NG.core.calls.app.getCurrentVersion(GAME_VER).addResponseHandler(function(response:Response<GetCurrentVersionData>)
 				{
 					GAME_VER = response.result.data.currentVersion;
 					GAME_VER_NUMS = GAME_VER.split(" ")[0].trim();
@@ -83,27 +83,28 @@ class NGio
 			/* They are NOT playing on newgrounds.com, no session id was found. We must start one manually, if we want to.
 			 * Note: This will cause a new browser window to pop up where they can log in to newgrounds
 			 */
-			NG.core.requestLogin(onNGLogin);
+			NG.core.requestLogin(onNGLogin());
 		}
 	}
 
-	function onNGLogin():Void
+	function onNGLogin():Null<io.newgrounds.NGLite.LoginOutcome -> Void>
 	{
 		trace('logged in! user:${NG.core.user.name}');
 		isLoggedIn = true;
 		FlxG.save.data.sessionId = NG.core.sessionId;
 		// FlxG.save.flush();
 		// Load medals then call onNGMedalFetch()
-		NG.core.requestMedals(onNGMedalFetch);
+		NG.core.requestMedals(onNGMedalFetch());
 
 		// Load Scoreboards hten call onNGBoardsFetch()
-		NG.core.requestScoreBoards(onNGBoardsFetch);
+		NG.core.scoreBoards.loadList(onNGBoardsFetch());
 
 		ngDataLoaded.dispatch();
+		return null;
 	}
 
 	// --- MEDALS
-	function onNGMedalFetch():Void
+	function onNGMedalFetch():Null<io.newgrounds.objects.events.Outcome<io.newgrounds.Call.CallError> -> Void>
 	{
 		/*
 			// Reading medal info
@@ -118,10 +119,11 @@ class NGio
 			if (!unlockingMedal.unlocked)
 				unlockingMedal.sendUnlock();
 		 */
+		 return null;
 	}
 
 	// --- SCOREBOARDS
-	function onNGBoardsFetch():Void
+	function onNGBoardsFetch():Null<io.newgrounds.objects.events.Outcome<io.newgrounds.Call.CallError> -> Void>
 	{
 		/*
 			// Reading medal info
@@ -143,6 +145,7 @@ class NGio
 		trace("shoulda got score by NOW!");
 		// board.requestScores(20);// get the best 10 scores ever logged
 		// more info on scores --- http://www.newgrounds.io/help/components/#scoreboard-getscores
+		return null;
 	}
 
 	inline static public function postScore(score:Int = 0, song:String)
